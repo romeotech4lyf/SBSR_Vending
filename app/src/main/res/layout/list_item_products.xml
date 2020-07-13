@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    app:cardBackgroundColor="@color/colorWhite"
+    app:cardCornerRadius="10dp"
+    android:id="@+id/list_item_products"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardElevation="2dp"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="6dp"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:layout_gravity="end"
+            android:text="37"
+            android:id="@+id/list_item_product_remaining"
+            android:textColor="@color/colorBlack"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:layout_gravity="end"
+            android:text="Remaining"
+            android:layout_marginTop="-5dp"
+            android:textColor="@color/colorSeventyFivePercentBlack"
+            android:textSize="12dp"
+            />
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="0dp"
+            android:layout_weight=".5"
+            android:id="@+id/list_item_product_images"
+            android:src="@mipmap/parle_g" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:layout_gravity="start"
+            android:text="5.00"
+            android:layout_marginBottom="-5dp"
+            android:id="@+id/list_item_product_prices"
+            android:textColor="@color/colorPrimary"
+            android:textSize="24dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:id="@+id/list_item_product_names"
+            android:layout_gravity="start"
+            android:text="Parle-G Buiscuits"
+            android:textColor="@color/colorBlack"
+            android:textSize="16dp"
+             />
+
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+
