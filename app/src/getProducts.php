@@ -18,7 +18,7 @@ if (mysqli_num_rows($result) > 0) {
     $row_array['name'] = $row['name'];
     $row_array['url'] = $row['imageUrl'];
     $row_array['price'] = $row['price'];
-    $row_array['count'] = $row['count'];
+    $row_array['countp'] = $row['count'];
 
     array_push($return_arr,$row_array);
   }
