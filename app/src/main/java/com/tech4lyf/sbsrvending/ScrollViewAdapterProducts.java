@@ -1,25 +1,31 @@
 package com.tech4lyf.sbsrvending;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import static com.tech4lyf.sbsrvending.ProductActivity.productsCount;
 
 public class ScrollViewAdapterProducts extends RecyclerView.Adapter<ScrollViewAdapterProducts.ViewHolder> {
-    private ArrayList<Product> products;
-    private int[] a;
+    private Product[] products;
+    private Context context;
 
-    public ScrollViewAdapterProducts(ArrayList<Product> products){
+    public ScrollViewAdapterProducts(Product[] products,Context context){
         this.products=products;
-        this.a = new int[12];
+        this.context = context;
     }
 
     @NonNull
@@ -30,7 +36,11 @@ public class ScrollViewAdapterProducts extends RecyclerView.Adapter<ScrollViewAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder,final int position) {
-        //Product product = products.get(position);
+        Product product = products[position];
+        holder.productName.setText(product.getName());
+        holder.productPrice.setText(product.getPrice());
+        if(product.getId()!=null)
+            holder.productImage.setImageDrawable(MainActivity.drawables[position]);
         holder.products.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,10 +55,8 @@ public class ScrollViewAdapterProducts extends RecyclerView.Adapter<ScrollViewAd
 
     @Override
     public int getItemCount() {
-
-        //return products.size();
-
-    return 12;}
+        return products.length;
+    }
 
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -56,6 +64,7 @@ public class ScrollViewAdapterProducts extends RecyclerView.Adapter<ScrollViewAd
         CardView products;
         TextView productName;
         TextView productPrice;
+        ImageView productImage;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -63,6 +72,7 @@ public class ScrollViewAdapterProducts extends RecyclerView.Adapter<ScrollViewAd
             products = itemView.findViewById(R.id.list_item_products);
             productName = itemView.findViewById(R.id.list_item_product_names);
             productPrice = itemView.findViewById(R.id.list_item_product_prices);
+            productImage = itemView.findViewById(R.id.list_item_product_images);
         }
     }
 }

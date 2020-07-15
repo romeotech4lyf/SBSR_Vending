@@ -3,24 +3,41 @@ package com.tech4lyf.sbsrvending;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class RecyclerViewAdapterProducts extends RecyclerView.Adapter<RecyclerViewAdapterProducts.ViewHolder> {
 
-    private ArrayList <Product> products;
+
+
+
+    private Product[] products;
     private Context context;
 
 
-    public RecyclerViewAdapterProducts(ArrayList products,Context context){
+    public Product[] getProducts() {
+        return products;
+    }
+
+    public void setProducts(Product[] products) {
+        this.products = products;
+    }
+
+    public RecyclerViewAdapterProducts(Product[] products, Context context){
         this.products = products;
         this.context=context;
 
@@ -35,7 +52,19 @@ public class RecyclerViewAdapterProducts extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder,final int position) {
-//        final Product product = products.get(position);
+        final Product product = products[position];
+        holder.productName.setText(product.getName());
+        holder.productPrice.setText(product.getPrice());
+        URL url = null;
+        try {
+            url = new URL(product.geturl());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        if(product.getId()!=null)
+
+            holder.productImage.setImageDrawable(MainActivity.drawables[position]);
+
         holder.products.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,14 +80,16 @@ public class RecyclerViewAdapterProducts extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public int getItemCount() {
-        return 12;
+        return products.length;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
         CardView products;
+        ImageView productImage;
         TextView productName;
         TextView productPrice;
+
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -66,6 +97,7 @@ public class RecyclerViewAdapterProducts extends RecyclerView.Adapter<RecyclerVi
             products = itemView.findViewById(R.id.list_item_products);
             productName = itemView.findViewById(R.id.list_item_product_names);
             productPrice = itemView.findViewById(R.id.list_item_product_prices);
+            productImage = itemView.findViewById(R.id.list_item_product_images);
         }
     }
 }

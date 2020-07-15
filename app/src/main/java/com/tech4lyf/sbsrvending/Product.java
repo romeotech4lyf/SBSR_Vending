@@ -1,46 +1,44 @@
 package com.tech4lyf.sbsrvending;
 
 public class Product {
-    private Integer id;
+    private String id;
     private String name;
-    private String imageUrl;
-    private Integer price;
-    private Integer count;
+    private String url;
+    private String price;
+    private String count;
 
-    public Product(Integer id, String name, String imageUrl, Integer price, Integer count) {
+
+
+    public Product(String id, String name, String url, String price, String count) {
         this.id = id;
         this.name = name;
-        this.imageUrl = imageUrl;
+        this.url = url;
         this.price = price;
         this.count = count;
     }
 
-    public Integer getCount() {
+    public String getCount() {
         return count;
     }
 
-    public void setCount(Integer count) {
+    public void setCount(String count) {
         this.count = count;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Product(){
-
+    public String geturl() {
+        return url;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void seturl(String url) {
+        this.url = url;
     }
 
     public String getName() {
@@ -51,11 +49,11 @@ public class Product {
         this.name = name;
     }
 
-    public Integer getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
