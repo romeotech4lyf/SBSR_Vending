@@ -2,6 +2,7 @@ package com.tech4lyf.sbsrvending;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,10 +28,15 @@ public class ProductActivity extends AppCompatActivity {
     private DiscreteScrollView productsScrollView;
     private TextView productsCountDecrease;
     private TextView productsCountIncrease;
+    private CardView productsPay;
+    private CardView productsClearAll;
     public static TextView productsCount;
     private Context context;
     private ImageView productsBg;
     private ImageView productsBgColor;
+    public static TextView priceToPay;
+    private ScrollViewAdapterProducts scrollViewAdapterProducts;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +54,16 @@ public class ProductActivity extends AppCompatActivity {
         productsCountIncrease= findViewById(R.id.products_count_increase);
         productsBg= findViewById(R.id.products_bg);
         productsBgColor= findViewById(R.id.products_bg_color);
-
+        priceToPay= findViewById(R.id.products_price_to_pay);
+        productsClearAll=findViewById(R.id.products_clear_all);
+        productsPay=findViewById(R.id.products_pay);
         //
         productsCount.setText(String.valueOf(MainActivity.a[MainActivity.currentProductPosition]));
-        ScrollViewAdapterProducts scrollViewAdapterProducts;
         scrollViewAdapterProducts = new ScrollViewAdapterProducts(MainActivity.products,context);
         productsScrollView.setAdapter(scrollViewAdapterProducts);
         productsScrollView.scrollToPosition(MainActivity.currentProductPosition);
+
+        calculate();
 
         productsScrollView.addOnItemChangedListener(new DiscreteScrollView.OnItemChangedListener<RecyclerView.ViewHolder>() {
             @Override
@@ -74,6 +83,7 @@ public class ProductActivity extends AppCompatActivity {
            @Override
            public void onClick(View v) {
                productsCount.setText(String.valueOf(++MainActivity.a[MainActivity.currentProductPosition]));
+               calculate();
            }
        });
 
@@ -82,8 +92,21 @@ public class ProductActivity extends AppCompatActivity {
            public void onClick(View v) {
                if(MainActivity.a[MainActivity.currentProductPosition]>0)
                productsCount.setText(String.valueOf(--MainActivity.a[MainActivity.currentProductPosition]));
+               calculate();
            }
        });
+
+
+       productsClearAll.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               MainActivity.currentProductPosition = -1;
+               MainActivity.a = new int[12];
+               priceToPay.setText("0.00");
+           }
+       });
+
+
 
 
         productsScrollView.setItemTransformer(new ScaleTransformer.Builder()
@@ -92,6 +115,30 @@ public class ProductActivity extends AppCompatActivity {
                 .setPivotX(Pivot.X.CENTER)
                 .setPivotY(Pivot.Y.BOTTOM)
                 .build());
+
+    }
+
+    public static void calculate(){
+        MainActivity.price=0;
+
+        for(int i= 0; i<12 ;i++)
+           MainActivity.price += Integer.parseInt(MainActivity.products[i].getPrice()) * MainActivity.a[i];
+
+        priceToPay.setText(String.valueOf(MainActivity.price + ".00"));
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        scrollViewAdapterProducts.notifyDataSetChanged();
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        scrollViewAdapterProducts.notifyDataSetChanged();
 
     }
 }

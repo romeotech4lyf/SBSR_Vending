@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     public static int[] a;
     public static Product[] products= new Product[12];
     public static int currentProductPosition = -1;
+    public static int price=0;
     public static Context context;
     JSONArray jsonArray = new JSONArray();
     private RecyclerView recyclerViewProducts;
@@ -109,6 +111,16 @@ public class MainActivity extends AppCompatActivity {
                         }
                         for (int i = 0; i < 12; i++) {
                             try {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        recyclerViewAdapterProducts = new RecyclerViewAdapterProducts(products, context);
+                                        recyclerViewProducts.setAdapter(recyclerViewAdapterProducts);
+                                        recyclerViewAdapterProducts.setProducts(products);
+                                        recyclerViewAdapterProducts.notifyDataSetChanged();
+
+                                    }
+                                });
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                                 Gson gson1 = new Gson();
                                 Product product;
@@ -121,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
                                             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
 
                                                 drawables[finalI] = resource;
+                                                recyclerViewAdapterProducts.notifyDataSetChanged();
 
                                             }
 
@@ -131,21 +144,13 @@ public class MainActivity extends AppCompatActivity {
                                         });
                                 products[finalI] = product;
 
+
                                 Log.d("post", products[i].getName());
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                recyclerViewAdapterProducts = new RecyclerViewAdapterProducts(products, context);
-                                recyclerViewProducts.setAdapter(recyclerViewAdapterProducts);
-                                recyclerViewAdapterProducts.setProducts(products);
-                                recyclerViewAdapterProducts.notifyDataSetChanged();
 
-                            }
-                        });
 
 
                     } catch (IOException ex) {

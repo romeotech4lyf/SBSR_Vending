@@ -17,6 +17,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import static com.tech4lyf.sbsrvending.ProductActivity.calculate;
 import static com.tech4lyf.sbsrvending.ProductActivity.productsCount;
 
 public class ScrollViewAdapterProducts extends RecyclerView.Adapter<ScrollViewAdapterProducts.ViewHolder> {
@@ -37,20 +38,23 @@ public class ScrollViewAdapterProducts extends RecyclerView.Adapter<ScrollViewAd
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder,final int position) {
         Product product = products[position];
-        holder.productName.setText(product.getName());
-        holder.productPrice.setText(product.getPrice());
-        if(product.getId()!=null)
-            holder.productImage.setImageDrawable(MainActivity.drawables[position]);
-        holder.products.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ++MainActivity.a[position];
-                productsCount.setText(String.valueOf(MainActivity.a[MainActivity.currentProductPosition]));
+        if(product!=null) {
+            holder.productName.setText(product.getName());
+            holder.productPrice.setText(product.getPrice());
+            holder.productSelected.setText(String.valueOf(MainActivity.a[position]));
+            if (product.getId() != null)
+                holder.productImage.setImageDrawable(MainActivity.drawables[position]);
+            holder.products.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ++MainActivity.a[position];
+                    productsCount.setText(String.valueOf(MainActivity.a[MainActivity.currentProductPosition]));
+                    holder.productSelected.setText(String.valueOf(MainActivity.a[position]));
+                    calculate();
 
-
-            }
-        });
-
+                }
+            });
+        }
     }
 
     @Override
@@ -64,6 +68,7 @@ public class ScrollViewAdapterProducts extends RecyclerView.Adapter<ScrollViewAd
         CardView products;
         TextView productName;
         TextView productPrice;
+        TextView productSelected;
         ImageView productImage;
 
 
@@ -73,6 +78,8 @@ public class ScrollViewAdapterProducts extends RecyclerView.Adapter<ScrollViewAd
             productName = itemView.findViewById(R.id.list_item_product_names);
             productPrice = itemView.findViewById(R.id.list_item_product_prices);
             productImage = itemView.findViewById(R.id.list_item_product_images);
+            productSelected = itemView.findViewById(R.id.list_item_product_selected);
+
         }
     }
 }

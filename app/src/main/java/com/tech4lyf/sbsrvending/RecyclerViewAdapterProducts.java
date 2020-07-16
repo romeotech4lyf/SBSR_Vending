@@ -47,35 +47,35 @@ public class RecyclerViewAdapterProducts extends RecyclerView.Adapter<RecyclerVi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_products,parent,false));
+
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder,final int position) {
         final Product product = products[position];
-        holder.productName.setText(product.getName());
-        holder.productPrice.setText(product.getPrice());
-        URL url = null;
-        try {
-            url = new URL(product.geturl());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        if(product!=null) {
+            holder.productName.setText(product.getName());
+            holder.productPrice.setText(product.getPrice());
+            holder.productSelected.setText(String.valueOf(MainActivity.a[position]));
+
+            if (product.getId() != null)
+                holder.productImage.setImageDrawable(MainActivity.drawables[position]);
+
+            holder.products.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MainActivity.currentProductPosition = position;
+                    ++MainActivity.a[position];
+                    context.startActivity(new Intent(context, ProductActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
+
+                }
+            });
+
+
         }
-        if(product.getId()!=null)
-
-            holder.productImage.setImageDrawable(MainActivity.drawables[position]);
-
-        holder.products.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainActivity.currentProductPosition =position;
-                ++MainActivity.a[position];
-                context.startActivity(new Intent(context,ProductActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-
-
-            }
-        });
-
     }
 
     @Override
@@ -89,6 +89,7 @@ public class RecyclerViewAdapterProducts extends RecyclerView.Adapter<RecyclerVi
         ImageView productImage;
         TextView productName;
         TextView productPrice;
+        TextView productSelected;
 
 
 
@@ -98,6 +99,7 @@ public class RecyclerViewAdapterProducts extends RecyclerView.Adapter<RecyclerVi
             productName = itemView.findViewById(R.id.list_item_product_names);
             productPrice = itemView.findViewById(R.id.list_item_product_prices);
             productImage = itemView.findViewById(R.id.list_item_product_images);
+            productSelected = itemView.findViewById(R.id.list_item_product_selected);
         }
     }
 }
