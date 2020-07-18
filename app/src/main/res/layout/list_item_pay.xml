@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_margin="6dp">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Parle-G Buiscuts"
+        android:textSize="20dp"
+        android:textColor="@color/colorBlack"
+        android:gravity="start|center_vertical"
+        android:id="@+id/list_item_pay_name"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_weight=".6"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight=".25"
+        android:layout_height="wrap_content"
+        android:text="2 x 12.00"
+        android:paddingEnd="4dp"
+        android:id="@+id/list_item_pay_price_x_count"
+        android:textSize="20dp"
+        android:textColor="@color/colorSeventyFivePercentBlack"
+        android:gravity="end|center_vertical"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight=".2"
+        android:layout_height="wrap_content"
+        android:text="10.00"
+        android:id="@+id/list_item_pay_price"
+        android:textSize="20dp"
+        android:paddingEnd="4dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorBase"
+        android:gravity="end|center_vertical"/>
+
+
+</LinearLayout>

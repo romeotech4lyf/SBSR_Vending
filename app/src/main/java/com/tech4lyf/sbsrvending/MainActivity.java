@@ -35,7 +35,7 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
     public static Drawable[] drawables = new Drawable[12];
-    public static int[] a;
+    public static int[] a = new int[12];
     public static Product[] products= new Product[12];
     public static int currentProductPosition = -1;
     public static int price=0;

@@ -59,8 +59,8 @@
                 android:background="@color/colorBase"
                 android:clickable="true"
                 android:focusable="true"
-                android:id="@+id/products_count_decrease"
                 android:foreground="?attr/selectableItemBackground"
+                android:id="@+id/products_count_decrease"
                 android:gravity="center"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
@@ -88,6 +88,9 @@
                 android:background="@color/colorBase"
                 android:gravity="center"
                 android:id="@+id/products_count_increase"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
                 android:text="+"
@@ -190,7 +193,6 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-
     </RelativeLayout>
 
     <ImageView
@@ -204,8 +206,6 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:src="@mipmap/sbsr" />
-
-
 
 
 </RelativeLayout>

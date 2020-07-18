@@ -7,6 +7,7 @@ import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -58,7 +59,7 @@ public class ProductActivity extends AppCompatActivity {
         productsClearAll=findViewById(R.id.products_clear_all);
         productsPay=findViewById(R.id.products_pay);
         //
-        productsCount.setText(String.valueOf(MainActivity.a[MainActivity.currentProductPosition]));
+        //productsCount.setText(String.valueOf(MainActivity.a[MainActivity.currentProductPosition]));
         scrollViewAdapterProducts = new ScrollViewAdapterProducts(MainActivity.products,context);
         productsScrollView.setAdapter(scrollViewAdapterProducts);
         productsScrollView.scrollToPosition(MainActivity.currentProductPosition);
@@ -79,20 +80,38 @@ public class ProductActivity extends AppCompatActivity {
             }
         });
 
+        productsPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calculate();
+                if(MainActivity.price==0){
+
+                }else{
+
+                    ProductActivity.this.startActivity(new Intent(ProductActivity.this,PayActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
+                }
+            }
+        });
+
        productsCountIncrease.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               productsCount.setText(String.valueOf(++MainActivity.a[MainActivity.currentProductPosition]));
+               if(MainActivity.currentProductPosition>-1){
+                   productsCount.setText(String.valueOf(++MainActivity.a[MainActivity.currentProductPosition]));
                calculate();
+           }
            }
        });
 
        productsCountDecrease.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
+               if(MainActivity.currentProductPosition>-1){
                if(MainActivity.a[MainActivity.currentProductPosition]>0)
-               productsCount.setText(String.valueOf(--MainActivity.a[MainActivity.currentProductPosition]));
+                productsCount.setText(String.valueOf(--MainActivity.a[MainActivity.currentProductPosition]));
                calculate();
+           }
            }
        });
 
@@ -100,9 +119,11 @@ public class ProductActivity extends AppCompatActivity {
        productsClearAll.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
+               productsCount.setText("0");
                MainActivity.currentProductPosition = -1;
                MainActivity.a = new int[12];
                priceToPay.setText("0.00");
+
            }
        });
 
@@ -141,4 +162,5 @@ public class ProductActivity extends AppCompatActivity {
         scrollViewAdapterProducts.notifyDataSetChanged();
 
     }
+
 }

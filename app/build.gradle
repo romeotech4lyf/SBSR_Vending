@@ -27,7 +27,7 @@ android {
         }
 
         debug {
-            manifestPlaceholders.cleartextTrafficPermitted ="true"
+            manifestPlaceholders.cleartextTrafficPermitted = "true"
         }
     }
 
