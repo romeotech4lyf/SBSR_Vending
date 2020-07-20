@@ -111,6 +111,8 @@ public class PayActivity extends AppCompatActivity {
             payQR = findViewById(R.id.pay_upi_qr);
             payTotal.setText(MainActivity.price + ".00");
 
+            //R11198867
+
 
             payEditItems.setOnClickListener(new View.OnClickListener() {
                 @Override
