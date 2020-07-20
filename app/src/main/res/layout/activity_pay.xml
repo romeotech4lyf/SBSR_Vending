@@ -166,13 +166,13 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/pay_upi"
             android:layout_width="wrap_content"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:clickable="true"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
             app:cardBackgroundColor="@color/colorWhite"
-            app:cardCornerRadius="30dp"
+            app:cardCornerRadius="10dp"
             app:cardElevation="8dp"
             app:cardUseCompatPadding="true">
 
@@ -180,24 +180,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:orientation="horizontal">
-
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="51dp"
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="center_horizontal"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
                     android:gravity="center"
                     android:text="PAY UPI"
                     android:textColor="@color/colorGreen"
-                    android:textSize="20dp"
+                    android:textSize="16dp"
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/pay_upi_qr"
                     />
 
 
