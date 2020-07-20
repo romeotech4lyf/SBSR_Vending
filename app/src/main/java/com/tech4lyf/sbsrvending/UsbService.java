@@ -169,6 +169,8 @@ public class UsbService extends Service {
     public void write(byte[] data) {
         if (serialPort != null)
             serialPort.write(data);
+        else
+            Log.d("No Serial Port",data.toString());
     }
 
     public void setHandler(Handler mHandler) {
