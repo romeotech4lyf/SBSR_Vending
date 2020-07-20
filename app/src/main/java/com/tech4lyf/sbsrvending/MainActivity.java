@@ -25,13 +25,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity {
     public static Drawable[] drawables = new Drawable[12];
@@ -76,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
 
         getData();
 
@@ -144,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
                                         });
                                 products[finalI] = product;
 
-
                                 Log.d("post", products[i].getName());
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -163,6 +164,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+
+
+
+
 
         /*{
 

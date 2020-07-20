@@ -2,22 +2,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".PayActivity"
     android:background="@color/colorAccent"
     android:orientation="vertical">
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="-230dp"
-        android:src="@drawable/circle"
-        />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:src="@mipmap/sbsr" />
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -52,7 +49,7 @@
             android:orientation="vertical">
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:id="@+id/recycler_view_pay"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
@@ -209,4 +206,6 @@
 
 
     </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 </RelativeLayout>
