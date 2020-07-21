@@ -12,9 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:src="@mipmap/sbsr" />
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -47,9 +48,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:id="@+id/recycler_view_pay"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
@@ -207,5 +210,5 @@
 
     </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 </RelativeLayout>
