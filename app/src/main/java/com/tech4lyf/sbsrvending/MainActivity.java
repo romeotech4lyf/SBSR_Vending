@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,25 +24,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity {
-    public static Drawable[] drawables = new Drawable[12];
-    public static int[] a = new int[12];
-    public static Product[] products= new Product[12];
+    public static ArrayList<Drawable> drawables = new ArrayList<>();
+    public static ArrayList<Integer> a = new ArrayList<>();
+    public static ArrayList<Product> products = new ArrayList<>();
     public static int currentProductPosition = -1;
-    public static int price=0;
+    public static int price = 0;
     public static Context context;
-    JSONArray jsonArray = new JSONArray();
+    private JSONArray jsonArray = new JSONArray();
     private RecyclerView recyclerViewProducts;
     private CardView mainRefresh;
     private CardView mainClear;
@@ -56,15 +51,13 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         //
-        a = new int[12];
         recyclerViewProducts = findViewById(R.id.recycler_view_products);
         mainRefresh = findViewById(R.id.main_refresh);
         mainClear = findViewById(R.id.main_clear_all);
         context = MainActivity.this;
 
 
-
-      mainRefresh.setOnClickListener(new View.OnClickListener() {
+        mainRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getData();
@@ -75,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 currentProductPosition = -1;
-                a = new int[12];
+                a = new ArrayList<>();
 
             }
         });
@@ -111,11 +104,12 @@ public class MainActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        for (int i = 0; i < 12; i++) {
+                        for (int i = 0; i < jsonArray.length(); i++) {
                             try {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
+                                        a.add(0);
                                         recyclerViewAdapterProducts = new RecyclerViewAdapterProducts(products, context);
                                         recyclerViewProducts.setAdapter(recyclerViewAdapterProducts);
                                         recyclerViewAdapterProducts.setProducts(products);
@@ -134,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                                             @Override
                                             public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
 
-                                                drawables[finalI] = resource;
+                                                drawables.add(finalI,resource);
                                                 recyclerViewAdapterProducts.notifyDataSetChanged();
 
                                             }
@@ -144,14 +138,13 @@ public class MainActivity extends AppCompatActivity {
 
                                             }
                                         });
-                                products[finalI] = product;
+                                products.add(finalI,product);
 
-                                Log.d("post", products[i].getName());
+                                Log.d("post", products.get(i).getName());
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
                         }
-
 
 
                     } catch (IOException ex) {

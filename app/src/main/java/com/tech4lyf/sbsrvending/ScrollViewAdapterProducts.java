@@ -21,10 +21,10 @@ import static com.tech4lyf.sbsrvending.ProductActivity.calculate;
 import static com.tech4lyf.sbsrvending.ProductActivity.productsCount;
 
 public class ScrollViewAdapterProducts extends RecyclerView.Adapter<ScrollViewAdapterProducts.ViewHolder> {
-    private Product[] products;
+    private ArrayList<Product> products;
     private Context context;
 
-    public ScrollViewAdapterProducts(Product[] products,Context context){
+    public ScrollViewAdapterProducts(ArrayList<Product> products,Context context){
         this.products=products;
         this.context = context;
     }
@@ -37,19 +37,19 @@ public class ScrollViewAdapterProducts extends RecyclerView.Adapter<ScrollViewAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder,final int position) {
-        Product product = products[position];
+        Product product = products.get(position);
         if(product!=null) {
             holder.productName.setText(product.getName());
             holder.productPrice.setText(product.getPrice());
-            holder.productSelected.setText(String.valueOf(MainActivity.a[position]));
+            holder.productSelected.setText(String.valueOf(MainActivity.a.get(position)));
             if (product.getId() != null)
-                holder.productImage.setImageDrawable(MainActivity.drawables[position]);
+                holder.productImage.setImageDrawable(MainActivity.drawables.get(position));
             holder.products.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ++MainActivity.a[position];
-                    productsCount.setText(String.valueOf(MainActivity.a[MainActivity.currentProductPosition]));
-                    holder.productSelected.setText(String.valueOf(MainActivity.a[position]));
+                    MainActivity.a.set(position,MainActivity.a.get(position)+1);
+                    productsCount.setText(String.valueOf(MainActivity.a.get(MainActivity.currentProductPosition)));
+                    holder.productSelected.setText(String.valueOf(MainActivity.a.get(position)));
                     calculate();
 
                 }
@@ -59,7 +59,7 @@ public class ScrollViewAdapterProducts extends RecyclerView.Adapter<ScrollViewAd
 
     @Override
     public int getItemCount() {
-        return products.length;
+        return products.size();
     }
 
 

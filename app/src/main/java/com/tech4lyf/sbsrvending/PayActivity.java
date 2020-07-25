@@ -48,6 +48,7 @@ import com.shreyaspatil.EasyUpiPayment.model.TransactionDetails;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Set;
@@ -122,11 +123,11 @@ public class PayActivity extends AppCompatActivity  {
         portNum = getArguments().getInt("port");
         baudRate = getArguments().getInt("baud");
 */
-        for (int i = 0; i < 12; i++) {
-            if (MainActivity.a[i] != 0) {
-                payProductNames[x] = MainActivity.products[i].getName();
-                payProductPrice_X_Counts[x] = MainActivity.products[i].getPrice() + " x" + MainActivity.a[i];
-                payProductPrices[x] = Integer.parseInt(MainActivity.products[i].getPrice()) * MainActivity.a[i] + ".00";
+        for (int i = 0; i < MainActivity.a.size(); i++) {
+            if (MainActivity.a.get(i) != 0) {
+                payProductNames[x] = MainActivity.products.get(i).getName();
+                payProductPrice_X_Counts[x] = MainActivity.products.get(i).getPrice() + " x" + MainActivity.a.get(i);
+                payProductPrices[x] = Integer.parseInt(MainActivity.products.get(i).getPrice()) * MainActivity.a.get(i) + ".00";
                 x++;
             }
 
@@ -149,7 +150,7 @@ public class PayActivity extends AppCompatActivity  {
                 public void onClick(View v) {
                     //  PayActivity.this.onBackPressed();
                     if (usbService != null) { // if UsbService was correctly binded, Send data
-                        usbService.write(Arrays.toString(MainActivity.a).getBytes());
+                        usbService.write((MainActivity.a).toString().getBytes());
                     }
                     else
                         Log.d("msg","msg");
@@ -161,7 +162,7 @@ public class PayActivity extends AppCompatActivity  {
                 @Override
                 public void onClick(View v) {
                     MainActivity.currentProductPosition = -1;
-                    MainActivity.a = new int[12];
+                    MainActivity.a = new ArrayList<>();
                     Intent restartActivity = new Intent(PayActivity.this, MainActivity.class);
                     int id = 234567;
                     PendingIntent pendingIntent = PendingIntent.getActivity(PayActivity.this, id, restartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
