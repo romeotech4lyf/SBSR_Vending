@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         a.add(0);
+                                        drawables.add(null);
                                         recyclerViewAdapterProducts = new RecyclerViewAdapterProducts(products, context);
                                         recyclerViewProducts.setAdapter(recyclerViewAdapterProducts);
                                         recyclerViewAdapterProducts.setProducts(products);
