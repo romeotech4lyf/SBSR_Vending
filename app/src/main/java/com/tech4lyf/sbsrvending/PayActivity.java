@@ -123,11 +123,11 @@ public class PayActivity extends AppCompatActivity  {
         portNum = getArguments().getInt("port");
         baudRate = getArguments().getInt("baud");
 */
-        for (int i = 0; i < MainActivity.a.size(); i++) {
-            if (MainActivity.a.get(i) != 0) {
-                payProductNames[x] = MainActivity.products.get(i).getName();
-                payProductPrice_X_Counts[x] = MainActivity.products.get(i).getPrice() + " x" + MainActivity.a.get(i);
-                payProductPrices[x] = Integer.parseInt(MainActivity.products.get(i).getPrice()) * MainActivity.a.get(i) + ".00";
+        for (int i = 0; i < MainActivity.a.length; i++) {
+            if (MainActivity.a[i] != 0) {
+                payProductNames[x] = MainActivity.products[i].getName();
+                payProductPrice_X_Counts[x] = MainActivity.products[i].getPrice() + " x" + MainActivity.a[i];
+                payProductPrices[x] = Integer.parseInt(MainActivity.products[i].getPrice()) * MainActivity.a[i] + ".00";
                 x++;
             }
         }
@@ -141,10 +141,10 @@ public class PayActivity extends AppCompatActivity  {
             payEditItems = findViewById(R.id.pay_edit_items);
             payQR = findViewById(R.id.pay_upi_qr);
             payTotal.setText(MainActivity.price + ".00");
-            StringBuilder stringBuilder = new StringBuilder(MainActivity.a.toString());
+            StringBuilder stringBuilder = new StringBuilder(Arrays.toString(MainActivity.a));
             stringBuilder.deleteCharAt(0);
             stringBuilder.deleteCharAt(stringBuilder.indexOf("]"));
-            Log.d("msg",MainActivity.a.toString());
+            Log.d("msg", Arrays.toString(MainActivity.a));
             Log.d("msg",stringBuilder.toString());
 
             //R11198867
@@ -157,7 +157,7 @@ public class PayActivity extends AppCompatActivity  {
                     //  PayActivity.this.onBackPressed();
                     if (usbService != null) { // if UsbService was correctly binded, Send data
                         usbService.write(stringBuilder.toString().getBytes());
-                        Log.d("msg",MainActivity.a.toString());
+                        Log.d("msg", Arrays.toString(MainActivity.a));
                     }
                     else
                         Log.d("msg","msg");
@@ -170,7 +170,7 @@ public class PayActivity extends AppCompatActivity  {
                 @Override
                 public void onClick(View v) {
                     MainActivity.currentProductPosition = -1;
-                    MainActivity.a = new ArrayList<>();
+                    MainActivity.a = new int[12];
                     Intent restartActivity = new Intent(PayActivity.this, MainActivity.class);
                     int id = 234567;
                     PendingIntent pendingIntent = PendingIntent.getActivity(PayActivity.this, id, restartActivity, PendingIntent.FLAG_CANCEL_CURRENT);

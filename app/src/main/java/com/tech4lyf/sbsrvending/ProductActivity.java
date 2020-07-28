@@ -70,11 +70,11 @@ public class ProductActivity extends AppCompatActivity {
             @Override
             public void onCurrentItemChanged(@Nullable RecyclerView.ViewHolder viewHolder, int i) {
                 MainActivity.currentProductPosition = productsScrollView.getCurrentItem();
-                productsCount.setText(String.valueOf(MainActivity.a.get(MainActivity.currentProductPosition)));
-                Drawable drawable =MainActivity.drawables.get(MainActivity.currentProductPosition);
+                productsCount.setText(String.valueOf(MainActivity.a[MainActivity.currentProductPosition]));
+                Drawable drawable =MainActivity.drawables[MainActivity.currentProductPosition];
                 Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
                 Palette palette = Palette.from(bitmap).maximumColorCount(16).generate();
-                productsBg.setImageDrawable(MainActivity.drawables.get(MainActivity.currentProductPosition));
+                productsBg.setImageDrawable(MainActivity.drawables[MainActivity.currentProductPosition]);
                 productsBgColor.setBackgroundColor(palette.getVibrantColor(0));
 
             }
@@ -98,8 +98,7 @@ public class ProductActivity extends AppCompatActivity {
            @Override
            public void onClick(View v) {
                if(MainActivity.currentProductPosition>-1){
-                   MainActivity.a.set(MainActivity.currentProductPosition,MainActivity.a.get(MainActivity.currentProductPosition)+1);
-                   productsCount.setText(String.valueOf(MainActivity.a.get(MainActivity.currentProductPosition)));
+                   productsCount.setText(String.valueOf(++MainActivity.a[MainActivity.currentProductPosition]));
                calculate();
            }
            }
@@ -109,11 +108,8 @@ public class ProductActivity extends AppCompatActivity {
            @Override
            public void onClick(View v) {
                if(MainActivity.currentProductPosition>-1){
-              if(MainActivity.a.get(MainActivity.currentProductPosition)>0) {
-                  MainActivity.a.set(MainActivity.currentProductPosition,MainActivity.a.get(MainActivity.currentProductPosition)-1);
-                  productsCount.setText(String.valueOf(MainActivity.a.get(MainActivity.currentProductPosition)));
-
-              }
+               if(MainActivity.a[MainActivity.currentProductPosition]>0)
+                productsCount.setText(String.valueOf(--MainActivity.a[MainActivity.currentProductPosition]));
                calculate();
            }
            }
@@ -125,7 +121,7 @@ public class ProductActivity extends AppCompatActivity {
            public void onClick(View v) {
                productsCount.setText("0");
                MainActivity.currentProductPosition = -1;
-               MainActivity.a = new ArrayList<>();
+               MainActivity.a = new int[16];
                priceToPay.setText("0.00");
 
            }
@@ -146,8 +142,8 @@ public class ProductActivity extends AppCompatActivity {
     public static void calculate(){
         MainActivity.price=0;
 
-        for(int i= 0; i<MainActivity.products.size() ;i++)
-           MainActivity.price += Integer.parseInt(MainActivity.products.get(i).getPrice()) * MainActivity.a.get(i);
+        for(int i= 0; i<16 ;i++)
+           MainActivity.price += Integer.parseInt(MainActivity.products[i].getPrice()) * MainActivity.a[i];
 
         priceToPay.setText(String.valueOf(MainActivity.price + ".00"));
 
