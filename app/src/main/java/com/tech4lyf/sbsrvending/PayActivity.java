@@ -130,6 +130,7 @@ public class PayActivity extends AppCompatActivity  {
                 payProductPrices[x] = Integer.parseInt(MainActivity.products.get(i).getPrice()) * MainActivity.a.get(i) + ".00";
                 x++;
             }
+        }
 
 
             recyclerViewPay = findViewById(R.id.recycler_view_pay);
@@ -140,6 +141,11 @@ public class PayActivity extends AppCompatActivity  {
             payEditItems = findViewById(R.id.pay_edit_items);
             payQR = findViewById(R.id.pay_upi_qr);
             payTotal.setText(MainActivity.price + ".00");
+            StringBuilder stringBuilder = new StringBuilder(MainActivity.a.toString());
+            stringBuilder.deleteCharAt(0);
+            stringBuilder.deleteCharAt(stringBuilder.indexOf("]"));
+            Log.d("msg",MainActivity.a.toString());
+            Log.d("msg",stringBuilder.toString());
 
             //R11198867
 
@@ -150,13 +156,15 @@ public class PayActivity extends AppCompatActivity  {
                 public void onClick(View v) {
                     //  PayActivity.this.onBackPressed();
                     if (usbService != null) { // if UsbService was correctly binded, Send data
-                        usbService.write((MainActivity.a).toString().getBytes());
+                        usbService.write(stringBuilder.toString().getBytes());
+                        Log.d("msg",MainActivity.a.toString());
                     }
                     else
                         Log.d("msg","msg");
 
                 }
             });
+
 
             payClearAll.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -175,7 +183,7 @@ public class PayActivity extends AppCompatActivity  {
             });
 
             upiGenerate();
-        }
+
     }
     private void setFilters() {
         IntentFilter filter = new IntentFilter();

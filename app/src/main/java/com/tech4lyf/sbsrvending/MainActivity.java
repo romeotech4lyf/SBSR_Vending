@@ -123,6 +123,8 @@ public class MainActivity extends AppCompatActivity {
                                 Product product;
                                 product = gson1.fromJson(jsonObject.toString(), Product.class);
                                 int finalI = i;
+                                try {
+
                                 Glide.with(context)
                                         .load(new URL(product.geturl()))
                                         .into(new CustomTarget<Drawable>() {
@@ -139,6 +141,9 @@ public class MainActivity extends AppCompatActivity {
 
                                             }
                                         });
+                                }catch (IllegalStateException e){
+
+                                }
                                 products.add(finalI,product);
 
                                 Log.d("post", products.get(i).getName());

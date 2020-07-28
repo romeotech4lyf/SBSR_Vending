@@ -49,10 +49,12 @@ public class RecyclerViewAdapterProducts extends RecyclerView.Adapter<RecyclerVi
         if (product != null) {
             holder.productName.setText(product.getName());
             holder.productPrice.setText(product.getPrice());
-            holder.productSelected.setText(String.valueOf(MainActivity.a.get(position)));
-
-            if (product.getId() != null)
+            try {
+                holder.productSelected.setText(String.valueOf(MainActivity.a.get(position)));
                 holder.productImage.setImageDrawable(MainActivity.drawables.get(position));
+            }catch (IndexOutOfBoundsException e){
+
+            }
 
             holder.products.setOnClickListener(new View.OnClickListener() {
                 @Override
