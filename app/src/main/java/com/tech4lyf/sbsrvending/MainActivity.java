@@ -7,22 +7,18 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -85,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-
                     try {
                         URL url = null;
                         try {
@@ -162,7 +157,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         /*{
-
             ApiClient.ApiInterface apiInterface = ApiClient.getApiClient().create(ApiClient.ApiInterface.class);
             Call<ArrayList<Product>> call = apiInterface.getProducts();
             call.enqueue(new Callback<ArrayList<Product>>() {
@@ -179,8 +173,6 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onFailure(@NonNull Call<ArrayList<Product>> call, @NonNull Throwable t) {
                     Log.d("post", t.getMessage());
-
-
                 }
             });
         }*/

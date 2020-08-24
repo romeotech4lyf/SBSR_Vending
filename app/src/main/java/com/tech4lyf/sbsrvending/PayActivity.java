@@ -1,7 +1,5 @@
 package com.tech4lyf.sbsrvending;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,18 +8,11 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.hardware.usb.UsbDevice;
-import android.hardware.usb.UsbDeviceConnection;
-import android.hardware.usb.UsbManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.Message;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -29,7 +20,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -39,21 +29,21 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.hoho.android.usbserial.driver.UsbSerialDriver;
-import com.hoho.android.usbserial.driver.UsbSerialPort;
-import com.hoho.android.usbserial.driver.UsbSerialProber;
-import com.shreyaspatil.EasyUpiPayment.EasyUpiPayment;
-import com.shreyaspatil.EasyUpiPayment.listener.PaymentStatusListener;
-import com.shreyaspatil.EasyUpiPayment.model.TransactionDetails;
+import com.tech4lyf.sbsrvending.utility.AvenuesParams;
+import com.tech4lyf.sbsrvending.utility.ServiceUtility;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.Set;
 
-public class PayActivity extends AppCompatActivity  {
+import static com.tech4lyf.sbsrvending.utility.Constants.accessCode;
+import static com.tech4lyf.sbsrvending.utility.Constants.cancelUrl;
+import static com.tech4lyf.sbsrvending.utility.Constants.currencyCode;
+import static com.tech4lyf.sbsrvending.utility.Constants.merchantId;
+import static com.tech4lyf.sbsrvending.utility.Constants.redirectUrl;
+import static com.tech4lyf.sbsrvending.utility.Constants.rsaKeyUrl;
+
+public class PayActivity extends AppCompatActivity {
 
 
     private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
@@ -79,15 +69,12 @@ public class PayActivity extends AppCompatActivity  {
         }
     };
 
-    private UsbSerialPort usbSerialPort;
-    private SerialService service;
-    private boolean initialStart = true;
     private BroadcastReceiver broadcastReceiver;
     private RecyclerViewAdapterPay recyclerViewAdapterPay;
     private RecyclerView recyclerViewPay;
     private TextView payTotal;
     private ImageView payQR;
-    private CardView payClearAll;
+    private CardView payPay;
     private CardView payEditItems;
     private int x = 0;
     private String[] payProductNames = new String[12];
@@ -107,6 +94,7 @@ public class PayActivity extends AppCompatActivity  {
             usbService = null;
         }
     };
+    private String orderId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,12 +105,7 @@ public class PayActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_pay);
         mHandler = new MyHandler(this);
 
-       /* setHasOptionsMenu(true);
-        setRetainInstance(true);
-        deviceId = getArguments().getInt("device");
-        portNum = getArguments().getInt("port");
-        baudRate = getArguments().getInt("baud");
-*/
+
         for (int i = 0; i < MainActivity.a.length; i++) {
             if (MainActivity.a[i] != 0) {
                 payProductNames[x] = MainActivity.products[i].getName();
@@ -133,58 +116,61 @@ public class PayActivity extends AppCompatActivity  {
         }
 
 
-            recyclerViewPay = findViewById(R.id.recycler_view_pay);
-            recyclerViewAdapterPay = new RecyclerViewAdapterPay(x, payProductNames, payProductPrices, payProductPrice_X_Counts);
-            recyclerViewPay.setAdapter(recyclerViewAdapterPay);
-            payTotal = findViewById(R.id.pay_total);
-            payClearAll = findViewById(R.id.pay_clear_all);
-            payEditItems = findViewById(R.id.pay_edit_items);
-            payQR = findViewById(R.id.pay_upi_qr);
-            payTotal.setText(MainActivity.price + ".00");
-            StringBuilder stringBuilder = new StringBuilder(Arrays.toString(MainActivity.a));
-            stringBuilder.deleteCharAt(0);
-            stringBuilder.deleteCharAt(stringBuilder.indexOf("]"));
-            Log.d("msg", Arrays.toString(MainActivity.a));
-            Log.d("msg",stringBuilder.toString());
+        recyclerViewPay = findViewById(R.id.recycler_view_pay);
+        recyclerViewAdapterPay = new RecyclerViewAdapterPay(x, payProductNames, payProductPrices, payProductPrice_X_Counts);
+        recyclerViewPay.setAdapter(recyclerViewAdapterPay);
+        payTotal = findViewById(R.id.pay_total);
+        payPay = findViewById(R.id.pay_pay);
+        payEditItems = findViewById(R.id.pay_edit_items);
+        payQR = findViewById(R.id.pay_upi_qr);
+        payTotal.setText(MainActivity.price + ".00");
+        StringBuilder stringBuilder = new StringBuilder(Arrays.toString(MainActivity.a));
+        stringBuilder.deleteCharAt(0);
+        stringBuilder.deleteCharAt(stringBuilder.indexOf("]"));
+        Log.d("msg", Arrays.toString(MainActivity.a));
+        Log.d("msg", stringBuilder.toString());
 
-            //R11198867
+        //R11198867
 
-
-
-            payEditItems.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //  PayActivity.this.onBackPressed();
-                    if (usbService != null) { // if UsbService was correctly binded, Send data
-                        usbService.write(stringBuilder.toString().getBytes());
-                        Log.d("msg", Arrays.toString(MainActivity.a));
-                    }
-                    else
-                        Log.d("msg","msg");
-
-                }
-            });
+        payEditItems.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PayActivity.this.onBackPressed();
+            }
+        });
 
 
-            payClearAll.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    MainActivity.currentProductPosition = -1;
-                    MainActivity.a = new int[12];
-                    Intent restartActivity = new Intent(PayActivity.this, MainActivity.class);
-                    int id = 234567;
-                    PendingIntent pendingIntent = PendingIntent.getActivity(PayActivity.this, id, restartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-                    AlarmManager alarmManager = (AlarmManager) PayActivity.this.getSystemService(Context.ALARM_SERVICE);
-                    alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pendingIntent);
-                    System.exit(0);
-                    //PayActivity.this.startActivity(new Intent(PayActivity.this,MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                    // PayActivity.this.finish();
-                }
-            });
+        payPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-            upiGenerate();
+                ccAvenue();
+                if (usbService != null) { // if UsbService was correctly binded, Send data
+                    usbService.write(stringBuilder.toString().getBytes());
+                    Log.d("msg", Arrays.toString(MainActivity.a));
+                } else
+                    Log.d("msg", "msg");
+            }
+
+        });
+
 
     }
+
+    private void ccAvenue(  ) {
+        orderId = String.valueOf(ServiceUtility.randInt(0, 9999999));
+        Intent intent = new Intent(PayActivity.this, WebViewActivity.class);
+        intent.putExtra(AvenuesParams.ACCESS_CODE, accessCode);
+        intent.putExtra(AvenuesParams.MERCHANT_ID, merchantId);
+        intent.putExtra(AvenuesParams.ORDER_ID, orderId);
+        intent.putExtra(AvenuesParams.CURRENCY, currencyCode);
+        intent.putExtra(AvenuesParams.AMOUNT, "1.00");
+        intent.putExtra(AvenuesParams.REDIRECT_URL, redirectUrl);
+        intent.putExtra(AvenuesParams.CANCEL_URL, cancelUrl);
+        intent.putExtra(AvenuesParams.RSA_KEY_URL, rsaKeyUrl);
+        PayActivity.this.startActivity(intent);
+    }
+
     private void setFilters() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(UsbService.ACTION_USB_PERMISSION_GRANTED);
@@ -212,58 +198,14 @@ public class PayActivity extends AppCompatActivity  {
     }
 
     private void upiGenerate() {
+
         final String payeeAddress = "kanimozhi.johndavid@okhdfcbank";
         final String payeeName = "SBSR";
         final String transactionId = "201906035612401";
         final String transactionMessage = "SBSR";
         final String amount = "10.00";
         final String code = "INR";
-        {
-            final EasyUpiPayment easyUpiPayment = new EasyUpiPayment.Builder()
-                    .with(this)
-                    .setPayeeVpa(payeeAddress)
-                    .setPayeeName(payeeName)
-                    .setTransactionId(transactionId)
-                    .setTransactionRefId("2019060302")
-                    .setDescription("SBSR")
-                    .setAmount("10.00")
-                    .build();
 
-
-            easyUpiPayment.setPaymentStatusListener(new PaymentStatusListener() {
-                @Override
-                public void onTransactionCompleted(TransactionDetails transactionDetails) {
-
-
-                }
-
-                @Override
-                public void onTransactionSuccess() {
-
-                }
-
-                @Override
-                public void onTransactionSubmitted() {
-
-                }
-
-                @Override
-                public void onTransactionFailed() {
-
-                }
-
-                @Override
-                public void onTransactionCancelled() {
-
-                }
-
-                @Override
-                public void onAppNotFound() {
-
-                }
-            });
-
-        }
         final String urlString = getUPIString(payeeAddress, payeeName, transactionId, transactionMessage, amount, code);
 
         BitMatrix bitMatrix = null;
@@ -285,32 +227,9 @@ public class PayActivity extends AppCompatActivity  {
         }
         payQR.setImageBitmap(bmp);
 
-        Uri myAction = Uri.parse(urlString);
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setData(myAction);
-        //startActivityForResult(intent, 120);
+        Uri uri = Uri.parse(urlString);
 
-    }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 100) {
-            if (resultCode == RESULT_OK) {
-                String res = data.getStringExtra("response");
-                if (res != null) {
-                    if (res.contains("Status=SUCCESS")) {
-                        Toast.makeText(this, "Payment successful!", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(this, "Payment was not successful! Try again later", Toast.LENGTH_LONG).show();
-                    }
-                }
-            } else {
-                Toast.makeText(this, "Payment was not successful!", Toast.LENGTH_LONG).show();
-            }
-        }
     }
 
     private String getUPIString(String payeeAddress, String payeeName, String trxnRefId,
@@ -321,7 +240,19 @@ public class PayActivity extends AppCompatActivity  {
         return UPI.replace(" ", "+");
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setFilters();  // Start listening notifications from UsbService
+        startService(UsbService.class, usbConnection, null); // Start UsbService(if it was not started before) and Bind it
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        unregisterReceiver(mUsbReceiver);
+        unbindService(usbConnection);
+    }
 
     private static class MyHandler extends Handler {
         private final WeakReference<PayActivity> mActivity;
@@ -346,22 +277,6 @@ public class PayActivity extends AppCompatActivity  {
             }
         }
     }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        setFilters();  // Start listening notifications from UsbService
-        startService(UsbService.class, usbConnection, null); // Start UsbService(if it was not started before) and Bind it
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        unregisterReceiver(mUsbReceiver);
-        unbindService(usbConnection);
-    }
-
 
 
 }

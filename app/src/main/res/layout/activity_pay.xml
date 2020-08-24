@@ -12,32 +12,28 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:src="@mipmap/sbsr" />
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="90dp"
-        android:background="@color/colorAccent">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Products"
             android:textSize="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="70dp"
             android:textStyle="bold"
             android:textColor="@color/colorWhite"
             android:gravity="center_horizontal|center_vertical"/>
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:cardBackgroundColor="@color/colorWhite"
         app:cardCornerRadius="10dp"
         android:clickable="true"
         android:focusable="true"
+        android:layout_marginTop="120dp"
+        android:layout_marginBottom="200dp"
         android:layout_marginEnd="5dp"
         android:layout_marginHorizontal="8dp"
         app:cardElevation="2dp"
@@ -46,15 +42,17 @@
         >
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/recycler_view_pay"
             android:orientation="vertical"
+            android:layout_weight=".85"
+            android:layout_marginBottom="50dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         <TextView
@@ -90,6 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="100dp"
             android:clickable="true"
+            android:layout_above="@id/pay_pay"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
             app:cardBackgroundColor="@color/diamondWhite"
@@ -111,7 +110,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
                     android:gravity="center"
-                    android:text="DISPENSE"
+                    android:text="EDIT ITEMS"
                     android:textColor="@color/colorPrimary"
                     android:textSize="20dp"
                     android:textStyle="bold" />
@@ -123,15 +122,17 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/pay_clear_all"
+            android:id="@+id/pay_pay"
             android:layout_width="wrap_content"
             android:layout_height="100dp"
             android:clickable="true"
-            android:layout_alignParentStart="true"
-            android:visibility="gone"
+            android:visibility="visible"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
             android:focusable="true"
             android:foreground="?attr/selectableItemBackground"
-            app:cardBackgroundColor="@color/colorPrimary"
+            app:cardBackgroundColor="@color/colorGreen"
             app:cardCornerRadius="30dp"
             app:cardElevation="8dp"
             app:cardUseCompatPadding="true">
@@ -150,7 +151,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
                     android:gravity="center"
-                    android:text="CLEAR ALL"
+                    android:text="PROCEED TO PAY"
                     android:textColor="@color/colorWhite"
                     android:textSize="20dp"
                     android:textStyle="bold" />
@@ -165,6 +166,7 @@
             android:id="@+id/pay_upi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_gravity="center_horizontal"
             android:clickable="true"
             android:focusable="true"
@@ -206,7 +208,5 @@
         </androidx.cardview.widget.CardView>
 
 
-    </LinearLayout>
 
-    </ScrollView>
 </RelativeLayout>
