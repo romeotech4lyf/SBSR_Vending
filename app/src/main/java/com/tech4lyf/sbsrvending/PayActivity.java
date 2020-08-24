@@ -46,7 +46,7 @@ import static com.tech4lyf.sbsrvending.utility.Constants.rsaKeyUrl;
 public class PayActivity extends AppCompatActivity {
 
 
-    private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
+    /*private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
@@ -67,7 +67,7 @@ public class PayActivity extends AppCompatActivity {
                     break;
             }
         }
-    };
+    };*/
 
     private BroadcastReceiver broadcastReceiver;
     private RecyclerViewAdapterPay recyclerViewAdapterPay;
@@ -81,7 +81,7 @@ public class PayActivity extends AppCompatActivity {
     private String[] payProductPrices = new String[12];
     private String[] payProductPrice_X_Counts = new String[12];
     private UsbService usbService;
-    private MyHandler mHandler;
+    /*private MyHandler mHandler;
     private final ServiceConnection usbConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName arg0, IBinder arg1) {
@@ -93,8 +93,9 @@ public class PayActivity extends AppCompatActivity {
         public void onServiceDisconnected(ComponentName arg0) {
             usbService = null;
         }
-    };
+    };*/
     private String orderId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +104,7 @@ public class PayActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_pay);
-        mHandler = new MyHandler(this);
+     //   mHandler = new MyHandler(this);
 
 
         for (int i = 0; i < MainActivity.a.length; i++) {
@@ -130,7 +131,6 @@ public class PayActivity extends AppCompatActivity {
         Log.d("msg", Arrays.toString(MainActivity.a));
         Log.d("msg", stringBuilder.toString());
 
-        //R11198867
 
         payEditItems.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,61 +143,38 @@ public class PayActivity extends AppCompatActivity {
         payPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 ccAvenue();
-                if (usbService != null) { // if UsbService was correctly binded, Send data
-                    usbService.write(stringBuilder.toString().getBytes());
-                    Log.d("msg", Arrays.toString(MainActivity.a));
-                } else
-                    Log.d("msg", "msg");
             }
-
         });
 
 
     }
-
-    private void ccAvenue(  ) {
+    private void ccAvenue() {
         orderId = String.valueOf(ServiceUtility.randInt(0, 9999999));
-        Intent intent = new Intent(PayActivity.this, WebViewActivity.class);
-        intent.putExtra(AvenuesParams.ACCESS_CODE, accessCode);
-        intent.putExtra(AvenuesParams.MERCHANT_ID, merchantId);
-        intent.putExtra(AvenuesParams.ORDER_ID, orderId);
-        intent.putExtra(AvenuesParams.CURRENCY, currencyCode);
-        intent.putExtra(AvenuesParams.AMOUNT, "1.00");
-        intent.putExtra(AvenuesParams.REDIRECT_URL, redirectUrl);
-        intent.putExtra(AvenuesParams.CANCEL_URL, cancelUrl);
-        intent.putExtra(AvenuesParams.RSA_KEY_URL, rsaKeyUrl);
+        Intent intent = new Intent(PayActivity.this, WebViewActivityAlt.class);
+        intent.putExtra(AvenuesParams.ACCESS_CODE, ServiceUtility.chkNull(accessCode).toString().trim());
+        intent.putExtra(AvenuesParams.MERCHANT_ID, ServiceUtility.chkNull(merchantId).toString().trim());
+        intent.putExtra(AvenuesParams.ORDER_ID, ServiceUtility.chkNull(orderId).toString().trim());
+        intent.putExtra(AvenuesParams.CURRENCY, ServiceUtility.chkNull(currencyCode).toString().trim());
+        intent.putExtra(AvenuesParams.AMOUNT, ServiceUtility.chkNull(MainActivity.price).toString().trim());
+        intent.putExtra(AvenuesParams.REDIRECT_URL, ServiceUtility.chkNull(redirectUrl).toString().trim());
+        intent.putExtra(AvenuesParams.CANCEL_URL, ServiceUtility.chkNull(cancelUrl).toString().trim());
+        intent.putExtra(AvenuesParams.RSA_KEY_URL, ServiceUtility.chkNull(rsaKeyUrl).toString().trim());
+        intent.putExtra(AvenuesParams.BILLING_NAME, ServiceUtility.chkNull("Charli").toString().trim());
+        intent.putExtra(AvenuesParams.BILLING_ADDRESS, ServiceUtility.chkNull("Room 101 ").toString().trim());
+        intent.putExtra(AvenuesParams.BILLING_COUNTRY, ServiceUtility.chkNull("India").toString().trim());
+        intent.putExtra(AvenuesParams.BILLING_STATE, ServiceUtility.chkNull("MH").toString().trim());
+        intent.putExtra(AvenuesParams.BILLING_CITY, ServiceUtility.chkNull("Indore").toString().trim());
+        intent.putExtra(AvenuesParams.BILLING_ZIP, ServiceUtility.chkNull("425001").toString().trim());
+        intent.putExtra(AvenuesParams.BILLING_TEL, ServiceUtility.chkNull("9595226054").toString().trim());
+        intent.putExtra(AvenuesParams.BILLING_EMAIL, ServiceUtility.chkNull("pratik.pai@avenues.info").toString().trim());
+        intent.putExtra(AvenuesParams.PAYMENT_OPTION, "OPTUPI");
         PayActivity.this.startActivity(intent);
     }
 
-    private void setFilters() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(UsbService.ACTION_USB_PERMISSION_GRANTED);
-        filter.addAction(UsbService.ACTION_NO_USB);
-        filter.addAction(UsbService.ACTION_USB_DISCONNECTED);
-        filter.addAction(UsbService.ACTION_USB_NOT_SUPPORTED);
-        filter.addAction(UsbService.ACTION_USB_PERMISSION_NOT_GRANTED);
-        registerReceiver(mUsbReceiver, filter);
-    }
 
-    private void startService(Class<?> service, ServiceConnection serviceConnection, Bundle extras) {
-        if (!UsbService.SERVICE_CONNECTED) {
-            Intent startService = new Intent(this, service);
-            if (extras != null && !extras.isEmpty()) {
-                Set<String> keys = extras.keySet();
-                for (String key : keys) {
-                    String extra = extras.getString(key);
-                    startService.putExtra(key, extra);
-                }
-            }
-            startService(startService);
-        }
-        Intent bindingIntent = new Intent(this, service);
-        bindService(bindingIntent, serviceConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    private void upiGenerate() {
+    /*
+        private void upiGenerate () {
 
         final String payeeAddress = "kanimozhi.johndavid@okhdfcbank";
         final String payeeName = "SBSR";
@@ -232,13 +209,44 @@ public class PayActivity extends AppCompatActivity {
 
     }
 
-    private String getUPIString(String payeeAddress, String payeeName, String trxnRefId,
-                                String trxnNote, String payeeAmount, String currencyCode) {
+        private String getUPIString (String payeeAddress, String payeeName, String trxnRefId,
+            String trxnNote, String payeeAmount, String currencyCode){
         String UPI = "upi://pay?pa=" + payeeAddress + "&pn=" + payeeName
                 + "&tr=" + trxnRefId
                 + "&tn=" + trxnNote + "&am=" + payeeAmount + "&cu=" + currencyCode;
         return UPI.replace(" ", "+");
     }
+
+    */
+
+
+    /*
+
+        private void setFilters() {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(UsbService.ACTION_USB_PERMISSION_GRANTED);
+            filter.addAction(UsbService.ACTION_NO_USB);
+            filter.addAction(UsbService.ACTION_USB_DISCONNECTED);
+            filter.addAction(UsbService.ACTION_USB_NOT_SUPPORTED);
+            filter.addAction(UsbService.ACTION_USB_PERMISSION_NOT_GRANTED);
+            registerReceiver(mUsbReceiver, filter);
+        }
+
+        private void startService(Class<?> service, ServiceConnection serviceConnection, Bundle extras) {
+            if (!UsbService.SERVICE_CONNECTED) {
+                Intent startService = new Intent(this, service);
+                if (extras != null && !extras.isEmpty()) {
+                    Set<String> keys = extras.keySet();
+                    for (String key : keys) {
+                        String extra = extras.getString(key);
+                        startService.putExtra(key, extra);
+                    }
+                }
+                startService(startService);
+            }
+            Intent bindingIntent = new Intent(this, service);
+            bindService(bindingIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+        }
 
     @Override
     public void onResume() {
@@ -277,6 +285,6 @@ public class PayActivity extends AppCompatActivity {
             }
         }
     }
-
+*/
 
 }

@@ -13,7 +13,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -34,7 +33,7 @@ import com.tech4lyf.sbsrvending.utility.RSAUtility;
 import com.tech4lyf.sbsrvending.utility.ServiceUtility;
 
 
-public class WebViewActivity extends AppCompatActivity {
+public class WebViewActivityAlt extends AppCompatActivity {
     Intent mainIntent;
     String encVal;
     String vResponse;
@@ -57,7 +56,7 @@ public class WebViewActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             // Showing progress dialog
-            LoadingDialog.showLoadingDialog(WebViewActivity.this, "Loading...");
+            LoadingDialog.showLoadingDialog(WebViewActivityAlt.this, "Loading...");
 
         }
 
@@ -68,8 +67,7 @@ public class WebViewActivity extends AppCompatActivity {
                 StringBuffer vEncVal = new StringBuffer("");
                 vEncVal.append(ServiceUtility.addToPostParams(AvenuesParams.AMOUNT, mainIntent.getStringExtra(AvenuesParams.AMOUNT)));
                 vEncVal.append(ServiceUtility.addToPostParams(AvenuesParams.CURRENCY, mainIntent.getStringExtra(AvenuesParams.CURRENCY)));
-                encVal = RSAUtility.encrypt(vEncVal.substring(0, vEncVal.length() - 1), vResponse);
-                Log.d("vResponse",vResponse);//encrypt amount and currency
+                encVal = RSAUtility.encrypt(vEncVal.substring(0, vEncVal.length() - 1), vResponse);  //encrypt amount and currency
             }
 
             return null;
@@ -90,7 +88,7 @@ public class WebViewActivity extends AppCompatActivity {
                     if (html.indexOf("Failure") != -1) {
                         status = "Transaction Declined!";
                     } else if (html.indexOf("Success") != -1) {
-                        status = "Transaction Successful!";
+                        status = "SUCCESS";
                     } else if (html.indexOf("Aborted") != -1) {
                         status = "Transaction Cancelled!";
                     } else {
@@ -100,6 +98,7 @@ public class WebViewActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), StatusActivity.class);
                     intent.putExtra("transStatus", status);
                     startActivity(intent);
+                    WebViewActivityAlt.this.finish();
                 }
             }
 
@@ -119,7 +118,7 @@ public class WebViewActivity extends AppCompatActivity {
                 @Override
                 public void onPageStarted(WebView view, String url, Bitmap favicon) {
                     super.onPageStarted(view, url, favicon);
-                    LoadingDialog.showLoadingDialog(WebViewActivity.this, "Loading...");
+                    LoadingDialog.showLoadingDialog(WebViewActivityAlt.this, "Loading...");
                 }
             });
 
@@ -129,24 +128,44 @@ public class WebViewActivity extends AppCompatActivity {
                         + "="
                         + URLEncoder.encode(mainIntent.getStringExtra(AvenuesParams.ACCESS_CODE), "UTF-8")
                         + "&"
-                        + AvenuesParams.MERCHANT_ID
-                        + "="
+                        + AvenuesParams.MERCHANT_ID + "="
                         + URLEncoder.encode(mainIntent.getStringExtra(AvenuesParams.MERCHANT_ID), "UTF-8")
-                        + "&" + AvenuesParams.ORDER_ID
+                        + "&"
+                        + AvenuesParams.ORDER_ID
                         + "="
                         + URLEncoder.encode(mainIntent.getStringExtra(AvenuesParams.ORDER_ID), "UTF-8")
                         + "&"
                         + AvenuesParams.REDIRECT_URL
                         + "="
                         + URLEncoder.encode(mainIntent.getStringExtra(AvenuesParams.REDIRECT_URL), "UTF-8")
-                        + "&" + AvenuesParams.CANCEL_URL
+                        + "&"
+                        + AvenuesParams.CANCEL_URL
                         + "="
                         + URLEncoder.encode(mainIntent.getStringExtra(AvenuesParams.CANCEL_URL), "UTF-8")
                         + "&"
                         + AvenuesParams.ENC_VAL
                         + "="
                         + URLEncoder.encode(encVal, "UTF-8");
-                webview.postUrl(Constants.TRANS_URL, postData.getBytes());
+                StringBuffer params = new StringBuffer();
+                params.append(ServiceUtility.addToPostParams(AvenuesParams.ACCESS_CODE,mainIntent.getStringExtra(AvenuesParams.ACCESS_CODE)));
+                params.append(ServiceUtility.addToPostParams(AvenuesParams.MERCHANT_ID,mainIntent.getStringExtra(AvenuesParams.MERCHANT_ID)));
+                params.append(ServiceUtility.addToPostParams(AvenuesParams.ORDER_ID,mainIntent.getStringExtra(AvenuesParams.ORDER_ID)));
+                params.append(ServiceUtility.addToPostParams(AvenuesParams.REDIRECT_URL,mainIntent.getStringExtra(AvenuesParams.REDIRECT_URL)));
+                params.append(ServiceUtility.addToPostParams(AvenuesParams.CANCEL_URL,mainIntent.getStringExtra(AvenuesParams.CANCEL_URL)));
+                params.append(ServiceUtility.addToPostParams(AvenuesParams.LANGUAGE,"EN"));
+                params.append(ServiceUtility.addToPostParams(AvenuesParams.BILLING_NAME,mainIntent.getStringExtra(AvenuesParams.BILLING_NAME)));
+                params.append(ServiceUtility.addToPostParams(AvenuesParams.BILLING_ADDRESS,mainIntent.getStringExtra(AvenuesParams.BILLING_ADDRESS)));
+                params.append(ServiceUtility.addToPostParams(AvenuesParams.BILLING_CITY,mainIntent.getStringExtra(AvenuesParams.BILLING_CITY)));
+                params.append(ServiceUtility.addToPostParams(AvenuesParams.BILLING_STATE,mainIntent.getStringExtra(AvenuesParams.BILLING_STATE)));
+                params.append(ServiceUtility.addToPostParams(AvenuesParams.BILLING_ZIP,mainIntent.getStringExtra(AvenuesParams.BILLING_ZIP)));
+                params.append(ServiceUtility.addToPostParams(AvenuesParams.BILLING_COUNTRY,mainIntent.getStringExtra(AvenuesParams.BILLING_COUNTRY)));
+                params.append(ServiceUtility.addToPostParams(AvenuesParams.BILLING_TEL,mainIntent.getStringExtra(AvenuesParams.BILLING_TEL)));
+                params.append(ServiceUtility.addToPostParams(AvenuesParams.BILLING_EMAIL,mainIntent.getStringExtra(AvenuesParams.BILLING_EMAIL)));
+                params.append(ServiceUtility.addToPostParams(AvenuesParams.PAYMENT_OPTION,mainIntent.getStringExtra(AvenuesParams.PAYMENT_OPTION)));
+                params.append(ServiceUtility.addToPostParams(AvenuesParams.ENC_VAL,URLEncoder.encode(encVal,"UTF-8")));
+
+                String vPostParams = params.substring(0,params.length()-1);
+                webview.postUrl(Constants.TRANS_URL, vPostParams.getBytes());
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -155,32 +174,31 @@ public class WebViewActivity extends AppCompatActivity {
     }
 
     public void get_RSA_key(final String ac, final String od) {
-        LoadingDialog.showLoadingDialog(WebViewActivity.this, "Loading...");
+        LoadingDialog.showLoadingDialog(WebViewActivityAlt.this, "Loading...");
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, mainIntent.getStringExtra(AvenuesParams.RSA_KEY_URL),
                 new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                //Toast.makeText(WebViewActivity.this,response,Toast.LENGTH_LONG).show();
-                LoadingDialog.cancelLoading();
+                    @Override
+                    public void onResponse(String response) {
+                        //Toast.makeText(WebViewActivity.this,response,Toast.LENGTH_LONG).show();
+                        LoadingDialog.cancelLoading();
 
-                if (response != null && !response.equals("")) {
-                    vResponse = response;
-                    ///save retrieved rsa key
-                    if (vResponse.contains("!ERROR!")) {
-                        show_alert(vResponse);
-                    } else {
-                        new RenderView().execute();   // Calling async task to get display content
+                        if (response != null && !response.equals("")) {
+                            vResponse = response;     ///save retrived rsa key
+                            if (vResponse.contains("!ERROR!")) {
+                                show_alert(vResponse);
+                            } else {
+                                new RenderView().execute();   // Calling async task to get display content
+                            }
+
+
+                        }
+                        else
+                        {
+                            show_alert("No response");
+                        }
                     }
-
-
-                }
-                else
-                {
-                    show_alert("No response");
-                }
-            }
-        } ,
+                },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
@@ -207,7 +225,7 @@ public class WebViewActivity extends AppCompatActivity {
 
     public void show_alert(String msg) {
         AlertDialog alertDialog = new AlertDialog.Builder(
-                WebViewActivity.this).create();
+                WebViewActivityAlt.this).create();
 
         alertDialog.setTitle("Error!!!");
         if (msg.contains("\n"))

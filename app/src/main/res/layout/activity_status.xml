@@ -3,13 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/gradient">
 
     <TextView
-        android:id="@+id/textView1"
-        android:layout_width="238dp"
-        android:layout_height="40dp"
-        android:layout_x="55dp"
-        android:layout_y="157dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/transaction_status"
+        android:text="Transaction Successful...\nPlease Collect..."
+        android:textColor="@color/colorWhite"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:layout_centerInParent="true"/>
 
 </RelativeLayout>
