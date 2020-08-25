@@ -84,8 +84,29 @@ public class StatusActivity extends AppCompatActivity {
 		}
         }
         else{
-        	transactionStatus.setText(status);
+        	transactionStatus.setText(status+ "\n Try Again...");
 		}
+
+
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+
+				try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} finally {
+					Intent intent = new Intent(StatusActivity.this,MainActivity.class);
+					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					getBaseContext().startActivity(intent);
+					StatusActivity.this.finish();
+
+				}
+
+			}
+		}).start();
+
 
 
     }
