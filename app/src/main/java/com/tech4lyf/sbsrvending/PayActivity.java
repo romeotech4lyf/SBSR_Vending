@@ -130,7 +130,7 @@ public class PayActivity extends AppCompatActivity {
         stringBuilder.deleteCharAt(stringBuilder.length()-1);
         String string = stringBuilder.toString().replaceAll(" ","");
         Log.d("msg", string);
-        Toast.makeText(PayActivity.this,string,Toast.LENGTH_LONG);
+        Toast.makeText(PayActivity.this,string,Toast.LENGTH_LONG).show();
 
 
         payEditItems.setOnClickListener(new View.OnClickListener() {
