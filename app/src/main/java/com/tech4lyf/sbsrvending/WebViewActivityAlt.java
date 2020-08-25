@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -84,6 +85,7 @@ public class WebViewActivityAlt extends AppCompatActivity {
                 @JavascriptInterface
                 public void processHTML(String html) {
                     // process the html source code to get final status of transaction
+                    Log.d("html",html);
                     String status = null;
                     if (html.indexOf("Failure") != -1) {
                         status = "Transaction Declined!";
@@ -92,7 +94,7 @@ public class WebViewActivityAlt extends AppCompatActivity {
                     } else if (html.indexOf("Aborted") != -1) {
                         status = "Transaction Cancelled!";
                     } else {
-                        status = "Status Not Known!";
+                        status = "SUCCESS";
                     }
                     //Toast.makeText(getApplicationContext(), status, Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getApplicationContext(), StatusActivity.class);

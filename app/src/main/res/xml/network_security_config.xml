@@ -8,5 +8,6 @@
      </base-config>
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">developers.tech4lyf.com</domain>
+        <domain includeSubdomains = "true">122.182.6.216</domain>
     </domain-config>
 </network-security-config>

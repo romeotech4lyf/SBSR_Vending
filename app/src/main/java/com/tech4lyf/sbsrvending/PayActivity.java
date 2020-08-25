@@ -127,9 +127,10 @@ public class PayActivity extends AppCompatActivity {
         payTotal.setText(MainActivity.price + ".00");
         StringBuilder stringBuilder = new StringBuilder(Arrays.toString(MainActivity.a));
         stringBuilder.deleteCharAt(0);
-        stringBuilder.deleteCharAt(stringBuilder.indexOf("]"));
-        Log.d("msg", Arrays.toString(MainActivity.a));
-        Log.d("msg", stringBuilder.toString());
+        stringBuilder.deleteCharAt(stringBuilder.length()-1);
+        String string = stringBuilder.toString().replaceAll(" ","");
+        Log.d("msg", string);
+        Toast.makeText(PayActivity.this,string,Toast.LENGTH_LONG);
 
 
         payEditItems.setOnClickListener(new View.OnClickListener() {
@@ -156,7 +157,7 @@ public class PayActivity extends AppCompatActivity {
         intent.putExtra(AvenuesParams.MERCHANT_ID, ServiceUtility.chkNull(merchantId).toString().trim());
         intent.putExtra(AvenuesParams.ORDER_ID, ServiceUtility.chkNull(orderId).toString().trim());
         intent.putExtra(AvenuesParams.CURRENCY, ServiceUtility.chkNull(currencyCode).toString().trim());
-        intent.putExtra(AvenuesParams.AMOUNT, ServiceUtility.chkNull(MainActivity.price).toString().trim());
+        intent.putExtra(AvenuesParams.AMOUNT, ServiceUtility.chkNull("1.00").toString().trim());
         intent.putExtra(AvenuesParams.REDIRECT_URL, ServiceUtility.chkNull(redirectUrl).toString().trim());
         intent.putExtra(AvenuesParams.CANCEL_URL, ServiceUtility.chkNull(cancelUrl).toString().trim());
         intent.putExtra(AvenuesParams.RSA_KEY_URL, ServiceUtility.chkNull(rsaKeyUrl).toString().trim());

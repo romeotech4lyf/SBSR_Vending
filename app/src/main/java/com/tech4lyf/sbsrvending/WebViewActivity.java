@@ -94,7 +94,7 @@ public class WebViewActivity extends AppCompatActivity {
                     } else if (html.indexOf("Aborted") != -1) {
                         status = "Transaction Cancelled!";
                     } else {
-                        status = "Status Not Known!";
+                        status = "SUCCESS";
                     }
                     //Toast.makeText(getApplicationContext(), status, Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getApplicationContext(), StatusActivity.class);

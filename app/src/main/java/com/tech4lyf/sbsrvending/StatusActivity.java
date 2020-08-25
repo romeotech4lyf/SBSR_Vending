@@ -74,10 +74,13 @@ public class StatusActivity extends AppCompatActivity {
         status = mainIntent.getStringExtra("transStatus");
 		StringBuilder stringBuilder = new StringBuilder(Arrays.toString(MainActivity.a));
 		stringBuilder.deleteCharAt(0);
-		stringBuilder.deleteCharAt(stringBuilder.indexOf("]"));
+		stringBuilder.deleteCharAt(stringBuilder.length()-1);
+		String string = stringBuilder.toString().replaceAll(" ","");
         if(status.equals("SUCCESS")){
+        	Log.d("Success",status);
+			transactionStatus.setText("Transaction Successful...\n Please Collect...");
 			if (usbService != null) { // if UsbService was correctly binded, Send data
-				usbService.write(stringBuilder.toString().getBytes());
+				usbService.write(string.getBytes());
 				Log.d("msg", Arrays.toString(MainActivity.a));
 			} else{
 				Log.d("msg", "msg");
@@ -93,7 +96,7 @@ public class StatusActivity extends AppCompatActivity {
 			public void run() {
 
 				try {
-					Thread.sleep(5000);
+					Thread.sleep(20000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				} finally {
