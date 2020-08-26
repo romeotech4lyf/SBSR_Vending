@@ -68,27 +68,28 @@ public class StatusActivity extends AppCompatActivity {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.activity_status);
-
+		mHandler = new MyHandler(this);
         Intent mainIntent = getIntent();
         transactionStatus = findViewById(R.id.transaction_status);
-        status = mainIntent.getStringExtra("transStatus");
 		StringBuilder stringBuilder = new StringBuilder(Arrays.toString(MainActivity.a));
 		stringBuilder.deleteCharAt(0);
 		stringBuilder.deleteCharAt(stringBuilder.length()-1);
 		String string = stringBuilder.toString().replaceAll(" ","");
+		Log.d("msg",string);
+
+        /*status = mainIntent.getStringExtra("transStatus");
         if(status.equals("SUCCESS")){
         	Log.d("Success",status);
 			transactionStatus.setText("Transaction Successful...\n Please Collect...");
 			if (usbService != null) { // if UsbService was correctly binded, Send data
 				usbService.write(string.getBytes());
-				Log.d("msg", Arrays.toString(MainActivity.a));
 			} else{
 				Log.d("msg", "msg");
 		}
         }
         else{
         	transactionStatus.setText(status+ "\n Try Again...");
-		}
+		}*/
 
 
 		new Thread(new Runnable() {
@@ -155,10 +156,10 @@ public class StatusActivity extends AppCompatActivity {
 	}
 
 	private static class MyHandler extends Handler {
-		private final WeakReference<PayActivity> mActivity;
+		private final WeakReference<StatusActivity> mActivity;
 
-		public MyHandler(PayActivity activity) {
-			mActivity = new WeakReference<PayActivity>(activity);
+		public MyHandler(StatusActivity activity) {
+			mActivity = new WeakReference<>(activity);
 		}
 
 		@Override
@@ -166,7 +167,7 @@ public class StatusActivity extends AppCompatActivity {
 			switch (msg.what) {
 				case UsbService.MESSAGE_FROM_SERIAL_PORT:
 					String data = (String) msg.obj;
-					// mActivity.get().display.append(data);
+					//mActivity.get().display.append(data);
 					break;
 				case UsbService.CTS_CHANGE:
 					Toast.makeText(mActivity.get(), "CTS_CHANGE", Toast.LENGTH_LONG).show();

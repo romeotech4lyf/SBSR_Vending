@@ -46,7 +46,19 @@ import static com.tech4lyf.sbsrvending.utility.Constants.rsaKeyUrl;
 public class PayActivity extends AppCompatActivity {
 
 
-    /*private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
+
+    private RecyclerViewAdapterPay recyclerViewAdapterPay;
+    private RecyclerView recyclerViewPay;
+    private TextView payTotal;
+    private ImageView payQR;
+    private CardView payPay;
+    private CardView payEditItems;
+    private int x = 0;
+    private String[] payProductNames = new String[12];
+    private String[] payProductPrices = new String[12];
+    private String[] payProductPrice_X_Counts = new String[12];
+    /*
+    private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
@@ -67,21 +79,11 @@ public class PayActivity extends AppCompatActivity {
                     break;
             }
         }
-    };*/
+    };
 
-    private BroadcastReceiver broadcastReceiver;
-    private RecyclerViewAdapterPay recyclerViewAdapterPay;
-    private RecyclerView recyclerViewPay;
-    private TextView payTotal;
-    private ImageView payQR;
-    private CardView payPay;
-    private CardView payEditItems;
-    private int x = 0;
-    private String[] payProductNames = new String[12];
-    private String[] payProductPrices = new String[12];
-    private String[] payProductPrice_X_Counts = new String[12];
     private UsbService usbService;
-    /*private MyHandler mHandler;
+        private BroadcastReceiver broadcastReceiver;
+    private MyHandler mHandler;
     private final ServiceConnection usbConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName arg0, IBinder arg1) {
@@ -125,12 +127,12 @@ public class PayActivity extends AppCompatActivity {
         payEditItems = findViewById(R.id.pay_edit_items);
         payQR = findViewById(R.id.pay_upi_qr);
         payTotal.setText(MainActivity.price + ".00");
-        StringBuilder stringBuilder = new StringBuilder(Arrays.toString(MainActivity.a));
+       /* StringBuilder stringBuilder = new StringBuilder(Arrays.toString(MainActivity.a));
         stringBuilder.deleteCharAt(0);
         stringBuilder.deleteCharAt(stringBuilder.length()-1);
         String string = stringBuilder.toString().replaceAll(" ","");
         Log.d("msg", string);
-        Toast.makeText(PayActivity.this,string,Toast.LENGTH_LONG).show();
+        Toast.makeText(PayActivity.this,string,Toast.LENGTH_LONG).show();*/
 
 
         payEditItems.setOnClickListener(new View.OnClickListener() {
@@ -152,7 +154,7 @@ public class PayActivity extends AppCompatActivity {
     }
     private void ccAvenue() {
         orderId = String.valueOf(ServiceUtility.randInt(0, 9999999));
-        Intent intent = new Intent(PayActivity.this, WebViewActivityAlt.class);
+        Intent intent = new Intent(PayActivity.this, StatusActivity.class);
         intent.putExtra(AvenuesParams.ACCESS_CODE, ServiceUtility.chkNull(accessCode).toString().trim());
         intent.putExtra(AvenuesParams.MERCHANT_ID, ServiceUtility.chkNull(merchantId).toString().trim());
         intent.putExtra(AvenuesParams.ORDER_ID, ServiceUtility.chkNull(orderId).toString().trim());
