@@ -44,11 +44,9 @@ public class StatusActivity extends AppCompatActivity {
 			}
 		}
 	};
-
-	private BroadcastReceiver broadcastReceiver;
-    private TextView transactionStatus;
 	private UsbService usbService;
 	private MyHandler mHandler;
+
 	private final ServiceConnection usbConnection = new ServiceConnection() {
 		@Override
 		public void onServiceConnected(ComponentName arg0, IBinder arg1) {
@@ -62,26 +60,28 @@ public class StatusActivity extends AppCompatActivity {
 		}
 	};
 
-	private String status;
+
+
+    private TextView transactionStatus;
+    private String status;
 
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setContentView(R.layout.activity_status);
-		mHandler = new MyHandler(this);
-        Intent mainIntent = getIntent();
-        transactionStatus = findViewById(R.id.transaction_status);
-		StringBuilder stringBuilder = new StringBuilder(Arrays.toString(MainActivity.a));
-		stringBuilder.deleteCharAt(0);
-		stringBuilder.deleteCharAt(stringBuilder.length()-1);
-		String string = stringBuilder.toString().replaceAll(" ","");
-		Log.d("msg",string);
 
-        if (usbService != null) { // if UsbService was correctly binded, Send data
-            usbService.write(string.getBytes());
-        } else{
-            Log.d("msg", "msg");
-        }
+		mHandler = new MyHandler(this);
+
+
+
+		//Intent mainIntent = getIntent();
+        transactionStatus = findViewById(R.id.transaction_status);
+        StringBuilder stringBuilder = new StringBuilder(Arrays.toString(MainActivity.a));
+        stringBuilder.deleteCharAt(0);
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        String string = stringBuilder.toString().replaceAll(" ", "");
+        Log.d("msg", string);
+
 
         /*status = mainIntent.getStringExtra("transStatus");
         if(status.equals("SUCCESS")){
@@ -94,37 +94,42 @@ public class StatusActivity extends AppCompatActivity {
 		}*/
 
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
 
-				try {
-					Thread.sleep(20000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				} finally {
-					Intent intent = new Intent(StatusActivity.this,MainActivity.class);
-					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					getBaseContext().startActivity(intent);
-					StatusActivity.this.finish();
+                try {
+                    Thread.sleep(20000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    Intent intent = new Intent(StatusActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    getBaseContext().startActivity(intent);
+                    StatusActivity.this.finish();
 
-				}
+                }
 
-			}
-		}).start();
-
+            }
+        }).start();
 
 
     }
 
-	private void setFilters() {
-		IntentFilter filter = new IntentFilter();
-		filter.addAction(UsbService.ACTION_USB_PERMISSION_GRANTED);
-		filter.addAction(UsbService.ACTION_NO_USB);
-		filter.addAction(UsbService.ACTION_USB_DISCONNECTED);
-		filter.addAction(UsbService.ACTION_USB_NOT_SUPPORTED);
-		filter.addAction(UsbService.ACTION_USB_PERMISSION_NOT_GRANTED);
-		registerReceiver(mUsbReceiver, filter);
+
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		setFilters();  // Start listening notifications from UsbService
+		startService(UsbService.class, usbConnection, null); // Start UsbService(if it was not started before) and Bind it
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		unregisterReceiver(mUsbReceiver);
+		unbindService(usbConnection);
 	}
 
 	private void startService(Class<?> service, ServiceConnection serviceConnection, Bundle extras) {
@@ -143,20 +148,19 @@ public class StatusActivity extends AppCompatActivity {
 		bindService(bindingIntent, serviceConnection, Context.BIND_AUTO_CREATE);
 	}
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		setFilters();  // Start listening notifications from UsbService
-		startService(UsbService.class, usbConnection, null); // Start UsbService(if it was not started before) and Bind it
+	private void setFilters() {
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(UsbService.ACTION_USB_PERMISSION_GRANTED);
+		filter.addAction(UsbService.ACTION_NO_USB);
+		filter.addAction(UsbService.ACTION_USB_DISCONNECTED);
+		filter.addAction(UsbService.ACTION_USB_NOT_SUPPORTED);
+		filter.addAction(UsbService.ACTION_USB_PERMISSION_NOT_GRANTED);
+		registerReceiver(mUsbReceiver, filter);
 	}
 
-	@Override
-	public void onPause() {
-		super.onPause();
-		unregisterReceiver(mUsbReceiver);
-		unbindService(usbConnection);
-	}
-
+	/*
+	 * This handler will be passed to UsbService. Data received from serial port is displayed through this handler
+	 */
 	private static class MyHandler extends Handler {
 		private final WeakReference<StatusActivity> mActivity;
 
@@ -169,18 +173,17 @@ public class StatusActivity extends AppCompatActivity {
 			switch (msg.what) {
 				case UsbService.MESSAGE_FROM_SERIAL_PORT:
 					String data = (String) msg.obj;
-					//mActivity.get().display.append(data);
+					// mActivity.get().display.append(data);
 					break;
 				case UsbService.CTS_CHANGE:
-					Toast.makeText(mActivity.get(), "CTS_CHANGE", Toast.LENGTH_LONG).show();
+					Toast.makeText(mActivity.get(), "CTS_CHANGE",Toast.LENGTH_LONG).show();
 					break;
 				case UsbService.DSR_CHANGE:
-					Toast.makeText(mActivity.get(), "DSR_CHANGE", Toast.LENGTH_LONG).show();
+					Toast.makeText(mActivity.get(), "DSR_CHANGE",Toast.LENGTH_LONG).show();
 					break;
 			}
 		}
 	}
 
 
-
-} 
+}
