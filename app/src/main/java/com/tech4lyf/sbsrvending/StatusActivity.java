@@ -96,7 +96,7 @@ public class StatusActivity extends AppCompatActivity {
 		}*/
 
 
-        new Thread(new Runnable() {
+      /*  new Thread(new Runnable() {
             @Override
             public void run() {
 
@@ -113,7 +113,7 @@ public class StatusActivity extends AppCompatActivity {
                 }
 
             }
-        }).start();
+        }).start();*/
 
 
     }
