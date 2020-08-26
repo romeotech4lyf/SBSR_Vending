@@ -81,7 +81,9 @@ public class StatusActivity extends AppCompatActivity {
         stringBuilder.deleteCharAt(stringBuilder.length() - 1);
         String string = stringBuilder.toString().replaceAll(" ", "");
         Log.d("msg", string);
-
+		if (usbService != null) { // if UsbService was correctly binded, Send data
+			usbService.write(string.getBytes());
+		}
 
         /*status = mainIntent.getStringExtra("transStatus");
         if(status.equals("SUCCESS")){
