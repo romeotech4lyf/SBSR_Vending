@@ -81,7 +81,8 @@ public class StatusActivity extends AppCompatActivity {
         stringBuilder.deleteCharAt(stringBuilder.length() - 1);
         String string = stringBuilder.toString().replaceAll(" ", "");
         Log.d("msg", string);
-		if (usbService != null) { // if UsbService was correctly binded, Send data
+		if (usbService != null) {
+			// if UsbService was correctly binded, Send data
 			usbService.write(string.getBytes());
 		}
 
@@ -98,17 +99,6 @@ public class StatusActivity extends AppCompatActivity {
 
       /*  new Thread(new Runnable() {
             @Override
-            public void run() {
-
-                try {
-                    Thread.sleep(20000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } finally {
-                    Intent intent = new Intent(StatusActivity.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    getBaseContext().startActivity(intent);
-                    StatusActivity.this.finish();
 
                 }
 
