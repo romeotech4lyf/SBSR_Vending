@@ -77,15 +77,17 @@ public class StatusActivity extends AppCompatActivity {
 		String string = stringBuilder.toString().replaceAll(" ","");
 		Log.d("msg",string);
 
+        if (usbService != null) { // if UsbService was correctly binded, Send data
+            usbService.write(string.getBytes());
+        } else{
+            Log.d("msg", "msg");
+        }
+
         /*status = mainIntent.getStringExtra("transStatus");
         if(status.equals("SUCCESS")){
         	Log.d("Success",status);
 			transactionStatus.setText("Transaction Successful...\n Please Collect...");
-			if (usbService != null) { // if UsbService was correctly binded, Send data
-				usbService.write(string.getBytes());
-			} else{
-				Log.d("msg", "msg");
-		}
+
         }
         else{
         	transactionStatus.setText(status+ "\n Try Again...");
